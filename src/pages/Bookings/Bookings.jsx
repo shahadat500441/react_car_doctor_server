@@ -14,43 +14,43 @@ const Bookings = () => {
       .then((data) => setBookings(data));
   }, [url]);
 
-   const handelDelete=(id)=>{
-        const proceed= confirm("Are you sure u want to delete")
-        if(proceed){
-            fetch(`http://localhost:5000/bookings/${id}`,{
-                method:"DELETE"
-            })
-            .then(res=> res.json())
-            .then(data=> {
-                if(data.deletedCount > 0){
-                    alert("Delete successful")
-                    const remaining = bookings.filter(booking => booking._id !== id)
-                    setBookings(remaining)
-                }
-            })
-        }
+  const handelDelete = (id) => {
+    const proceed = confirm("Are you sure u want to delete");
+    if (proceed) {
+      fetch(`http://localhost:5000/bookings/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.deletedCount > 0) {
+            alert("Delete successful");
+            const remaining = bookings.filter((booking) => booking._id !== id);
+            setBookings(remaining);
+          }
+        });
     }
+  };
 
-    const handelBookingConfirm = (id)=>{
-        fetch(`http://localhost:5000/bookings/${id}`,{
-            method:'PATCH',
-            headers:{
-                "content-type":"application/json"
-            },
-            body:JSON.stringify({status:confirm})
-        })
-        .then(res=> res.json())
-        .then(data=>{
-            if(data.modifiedCount > 0){
-                //updated state
-                const remaining = bookings.filter(booking => booking._id !== id)
-                const updated = bookings.find(booking => booking._id === id)
-                updated.status = "confirm"
-                const newBooking = [updated, ...remaining]
-                setBookings(newBooking)
-            }
-        })
-    }
+  const handelBookingConfirm = (id) => {
+    fetch(`http://localhost:5000/bookings/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ status: confirm }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          //updated state
+          const remaining = bookings.filter((booking) => booking._id !== id);
+          const updated = bookings.find((booking) => booking._id === id);
+          updated.status = "confirm";
+          const newBooking = [updated, ...remaining];
+          setBookings(newBooking);
+        }
+      });
+  };
   return (
     <div>
       <h2 className="text-center text-4xl">Bookings:{bookings.length}</h2>
@@ -73,13 +73,16 @@ const Bookings = () => {
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking) => (
-              <BookingRow 
-              key={booking._id} 
-              handelDelete={handelDelete}
-              handelBookingConfirm={handelBookingConfirm}
-              booking={booking}></BookingRow>
-            ))}
+            
+              {bookings.map((booking) => (
+                <BookingRow
+                  key={booking._id}
+                  handelDelete={handelDelete}
+                  handelBookingConfirm={handelBookingConfirm}
+                  booking={booking}
+                ></BookingRow>
+              ))}
+            
           </tbody>
         </table>
       </div>
